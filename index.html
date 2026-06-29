@@ -53,7 +53,8 @@
         .bar.invertido { background: var(--cali-yellow); height: 40%; border: 2px solid #d4ba00; }
         .bar.ganancia { background: var(--cali-red); height: 75%; }
         .bar span { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); font-weight: bold; color: var(--text); }
-        .bar-label { margin-top: 0.5rem; font-weight: 600; font-size: 0.9rem; }
+        .chart-labels { display: flex; justify-content: center; gap: 5.5rem; margin-top: 0.5rem; }
+        .bar-label { font-weight: 600; font-size: 0.9rem; text-align: center; }
 
         /* --- FORMULARIO FIJO Y VALIDADO --- */
         .form-bg { background: #fff; padding: 4rem 2rem; border-radius: 30px; margin: 3rem auto; max-width: 700px; box-shadow: 0 15px 30px rgba(0,0,0,0.05); border: 3px solid var(--cali-blue); }
@@ -62,7 +63,6 @@
         .form-group input, .form-group textarea { width: 100%; padding: 0.8rem; border: 2px solid #cbdfff; border-radius: 10px; font-size: 1rem; outline: none; transition: border 0.3s; background: #fafcff; }
         .form-group input:focus, .form-group textarea:focus { border-color: var(--cali-red); background: #fff; }
         
-        /* Modificación solicitada: Textarea Fijo sin redimensión */
         .form-group textarea { resize: none; }
         .char-counter { font-size: 0.8rem; color: #777; position: absolute; right: 10px; bottom: -20px; }
 
@@ -75,18 +75,70 @@
 
         /* --- MISION Y VISION --- */
         .mv-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; background: #fff; padding: 3rem; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); border: 1px solid #cbdfff; }
+        .mv-box { padding: 1rem 0; }
         .mv-box h3 { color: var(--cali-blue); margin-bottom: 1rem; font-size: 1.5rem; text-transform: uppercase; }
+        .mv-border { border-left: 2px solid #cbdfff; padding-left: 2rem; }
+
+        /* --- SECCIÓN DE REDES SOCIALES --- */
+        .redes-sociales-container { text-align: center; padding: 40px 20px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border-radius: 15px; margin: 30px auto; max-width: 600px; border: 1px solid #cbdfff; font-family: 'Poppins', sans-serif; }
+        .redes-sociales-container h3 { font-size: 1.6rem; margin-bottom: 8px; color: #000000; }
+        .redes-sociales-container p { font-size: 0.95rem; color: #3e337d; margin-bottom: 25px; }
+        .redes-iconos { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .red-link { display: flex; align-items: center; gap: 10px; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 1rem; color: white; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .red-link.instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); box-shadow: 0 4px 15px rgba(220, 39, 67, 0.3); }
+        .red-link.tiktok { background: #000000; border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); }
+        .red-link:hover { transform: translateY(-4px); }
+        .red-link.instagram:hover { box-shadow: 0 8px 25px rgba(220, 39, 67, 0.5); }
+        .red-link.tiktok:hover { box-shadow: -3px 0 0 #fe2c55, 3px 0 0 #25f4ee, 0 8px 25px rgba(0, 0, 0, 0.6); }
+        .icon-svg { width: 22px; height: 22px; fill: currentColor; }
 
         footer { background: var(--cali-blue); color: white; text-align: center; padding: 1.5rem; margin-top: 4rem; border-top: 4px solid var(--cali-red); }
 
         @keyframes grow { from { height: 0; } }
+
+        /* ==========================================
+           --- ADAPTACIÓN PARA MÓVILES Y TABLETS ---
+           ========================================== */
+        @media (max-width: 768px) {
+            nav { padding: 0.8rem 1rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+            .logo-container { flex-direction: column; gap: 0.2rem; }
+            .logo-img { height: 45px; }
+            .logo-text { font-size: 1.2rem; }
+            .nav-links a { margin: 0 0.5rem; font-size: 0.95rem; }
+
+            .banner-container { height: 300px; }
+            .slide-content { padding: 1rem; }
+            .slide-content h2 { font-size: 1.6rem; }
+            .slide-content p { font-size: 0.9rem; }
+            .banner-btn { font-size: 1.5rem; padding: 0.3rem 0.7rem; }
+            .prev { left: 10px; } .next { right: 10px; }
+
+            .section { padding: 2rem 1rem; }
+            .section h2 { font-size: 1.8rem; }
+            
+            .stat-card { padding: 1.5rem; }
+            .stat-card h3 { font-size: 2.2rem; }
+
+            .bar-container { gap: 1.5rem; }
+            .bar { width: 60px; }
+            .chart-labels { gap: 2rem; }
+            .bar-label { font-size: 0.8rem; }
+
+            .form-bg { padding: 2rem 1rem; border-radius: 20px; margin: 1.5rem auto; }
+            .form-bg h2 { font-size: 1.5rem; }
+
+            .mv-container { padding: 1.5rem; grid-template-columns: 1fr; }
+            .mv-border { border-left: none; border-top: 2px solid #cbdfff; padding-left: 0; padding-top: 1.5rem; }
+            
+            .redes-sociales-container { padding: 25px 15px; margin: 20px 10px; }
+            .red-link { width: 100%; justify-content: center; }
+        }
     </style>
 </head>
 <body>
 
     <nav>
         <div class="logo-container">
-            <!-- Usa tu archivo image_d8de65.png aquí -->
             <img src="diseños/logocali.webp" class="logo-img" alt="Logo Helados Cali">
             <div class="logo-text">El Tacón</div>
         </div>
@@ -96,7 +148,6 @@
         </div>
     </nav>
 
-    <!-- BANNER INTERACTIVO (Modifica los src con tus links de imagen de Helados Cali) -->
     <div class="banner-container">
         <button class="banner-btn prev" onclick="changeSlide(-1)">&#10094;</button>
         <button class="banner-btn next" onclick="changeSlide(1)">&#10095;</button>
@@ -118,7 +169,6 @@
         </div>
     </div>
 
-    <!-- SECCIÓN FINANCIERA -->
     <section class="section">
         <h2>Rentabilidad Extraordinaria</h2>
         <p>El modelo de Helados Cali te permite vender por volumen, dinamizando tu flujo de caja todos los días del año.</p>
@@ -141,14 +191,13 @@
                 <div class="bar invertido"><span>$320</span></div>
                 <div class="bar ganancia"><span>+$416</span></div>
             </div>
-            <div style="display: flex; gap: 5.5rem; margin-top: 0.5rem;">
+            <div class="chart-labels">
                 <div class="bar-label">Inversión Mensual ($80x4)</div>
                 <div class="bar-label" style="color: var(--cali-red);">Retorno + Utilidades Mínimas</div>
             </div>
         </div>
     </section>
 
-    <!-- FORMULARIO EMPRENDE CON NOSOTROS -->
     <section class="section" id="emprende">
         <div class="form-bg">
             <h2 style="margin-bottom: 2rem; color: var(--cali-blue);">🚀 Emprende Con Nosotros</h2>
@@ -158,7 +207,6 @@
                     <input type="text" id="nombre" required placeholder="Ej. Juan Pérez">
                 </div>
                 
-                <!-- Caja de Cédula Validada (Max 12 caracteres, inicia con V, E, J) -->
                 <div class="form-group">
                     <label>Cédula</label>
                     <input type="text" id="cedula" required maxlength="12" placeholder="Ej. V12345678">
@@ -171,7 +219,6 @@
                     <input type="hidden" id="coordenadas" required>
                 </div>
                 
-                <!-- Caja de Descripción Fija (Max 600 caracteres) -->
                 <div class="form-group">
                     <label>Breve descripción del negocio / local</label>
                     <textarea id="descripcion" rows="5" maxlength="600" required placeholder="Cuéntanos sobre tu local o punto de venta..."></textarea>
@@ -185,122 +232,40 @@
         </div>
     </section>
 
-    <!-- MISION Y VISION -->
     <section class="section">
         <div class="mv-container">
             <div class="mv-box">
                 <h3>Nuestra Misión</h3>
                 <p>Llevar alegría a cada rincón ofreciendo helados deliciosos a precios accesibles, impulsando el espíritu emprendedor de las familias mediante un modelo confiable de alta rentabilidad masiva.</p>
             </div>
-            <div class="mv-box" style="border-left: 2px solid #cbdfff; padding-left: 2rem;">
+            <div class="mv-box mv-border">
                 <h3>Nuestra Visión</h3>
                 <p>Consolidarnos como el punto de distribución líder de la marca en la zona, reconocidos por la excelencia en el servicio, la constante disponibilidad de catálogo y el crecimiento de nuestra red de aliados comerciales.</p>
             </div>
         </div>
     </section>
-<!-- SECCIÓN DE REDES SOCIALES -->
-<div class="redes-sociales-container">
-    <h3>¡Síguenos en nuestras redes!</h3>
-    <p>Mantente al tanto de nuestros nuevos sabores y promociones</p>
-    
-    <div class="redes-iconos">
-        <!-- Enlace a Instagram -->
-        <a href="https://www.instagram.com/heladoscalimcbo" target="_blank" class="red-link instagram">
-            <svg viewBox="0 0 24 24" class="icon-svg">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
-            </svg>
-            <span>Instagram</span>
-        </a>
 
-        <!-- Enlace a TikTok -->
-        <a href="https://www.tiktok.com/@heladoscalimcbo" target="_blank" class="red-link tiktok">
-            <svg viewBox="0 0 24 24" class="icon-svg">
-                <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.03 1.6 4.17 1.13 1.19 2.69 1.9 4.31 2v3.63c-1.68-.06-3.32-.67-4.66-1.69-.17-.12-.34-.26-.5-.4v6.62c.03 3.42-2.11 6.55-5.34 7.68-3.4 1.26-7.29-.25-8.91-3.41-1.68-3.15-.75-7.14 2.16-9.15 1.73-1.25 3.92-1.63 5.92-1.05v3.68c-1.12-.41-2.38-.2-3.33.52-.99.71-1.46 1.96-1.19 3.17.27 1.25 1.34 2.19 2.63 2.25 1.55.13 2.94-1.02 3.09-2.57.02-.19.02-.38.02-.57V0c-.1-.01-.2-.01-.3-.01z"/>
-            </svg>
-            <span>TikTok</span>
-        </a>
+    <div class="redes-sociales-container">
+        <h3>¡Síguenos en nuestras redes!</h3>
+        <p>Mantente al tanto de nuestros nuevos sabores y promociones</p>
+        
+        <div class="redes-iconos">
+            <a href="https://www.instagram.com/heladoscalimcbo" target="_blank" class="red-link instagram">
+                <svg viewBox="0 0 24 24" class="icon-svg">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+                </svg>
+                <span>Instagram</span>
+            </a>
+
+            <a href="https://www.tiktok.com/@heladoscalimcbo" target="_blank" class="red-link tiktok">
+                <svg viewBox="0 0 24 24" class="icon-svg">
+                    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.03 1.6 4.17 1.13 1.19 2.69 1.9 4.31 2v3.63c-1.68-.06-3.32-.67-4.66-1.69-.17-.12-.34-.26-.5-.4v6.62c.03 3.42-2.11 6.55-5.34 7.68-3.4 1.26-7.29-.25-8.91-3.41-1.68-3.15-.75-7.14 2.16-9.15 1.73-1.25 3.92-1.63 5.92-1.05v3.68c-1.12-.41-2.38-.2-3.33.52-.99.71-1.46 1.96-1.19 3.17.27 1.25 1.34 2.19 2.63 2.25 1.55.13 2.94-1.02 3.09-2.57.02-.19.02-.38.02-.57V0c-.1-.01-.2-.01-.3-.01z"/>
+                </svg>
+                <span>TikTok</span>
+            </a>
+        </div>
     </div>
-</div>
 
-<!-- ESTILOS CSS PARA LA SECCIÓN (Puedes mover esto a tu archivo .css o dejarlo aquí) -->
-<style>
-    .redes-sociales-container {
-        text-align: center;
-        padding: 40px 20px;
-        background: rgba(255, 255, 255, 0.05); /* Sutil transparencia glassmorphism */
-        backdrop-filter: blur(10px);
-        border-radius: 15px;
-        margin: 30px auto;
-        max-width: 600px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        font-family: 'Poppins', sans-serif;
-    }
-
-    .redes-sociales-container h3 {
-        font-size: 1.6rem;
-        margin-bottom: 8px;
-        color: #000000;
-    }
-
-    .redes-sociales-container p {
-        font-size: 0.95rem;
-        color: #3e337d;
-        margin-bottom: 25px;
-    }
-
-    .redes-iconos {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        flex-wrap: wrap;
-    }
-
-    .red-link {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 24px;
-        border-radius: 30px;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 1rem;
-        color: white;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    /* Colores y efectos para Instagram */
-    .red-link.instagram {
-        background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-        box-shadow: 0 4px 15px rgba(220, 39, 67, 0.3);
-    }
-
-    /* Colores y efectos para TikTok */
-    .red-link.tiktok {
-        background: #000000;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-    }
-
-    /* Efecto Hover (al pasar el mouse) */
-    .red-link:hover {
-        transform: translateY(-4px);
-    }
-    
-    .red-link.instagram:hover {
-        box-shadow: 0 8px 25px rgba(220, 39, 67, 0.5);
-    }
-
-    .red-link.tiktok:hover {
-        box-shadow: -3px 0 0 #fe2c55, 3px 0 0 #25f4ee, 0 8px 25px rgba(0, 0, 0, 0.6);
-    }
-
-    /* Estilo de los iconos SVG */
-    .icon-svg {
-        width: 22px;
-        height: 22px;
-        fill: currentColor;
-    }
-</style>
     <footer>
         <p>&copy; 2026 Helados Cali - El Tacón. Todos los derechos reservados.</p>
     </footer>
@@ -332,21 +297,16 @@
         const cedulaInput = document.getElementById('cedula');
         cedulaInput.addEventListener('input', (e) => {
             let valor = e.target.value.toUpperCase();
-            
-            // Si tiene caracteres, evaluar la primera letra obligatoria
             if (valor.length > 0) {
                 const primeraLetra = valor.charAt(0);
                 if (!['V', 'E', 'J'].includes(primeraLetra)) {
-                    valor = ''; // Borra si no empieza de forma válida
+                    valor = '';
                 }
             }
-            
-            // Filtrar el resto para que solo admita números tras la primera letra
             if (valor.length > 1) {
                 const cuerpoNumerico = valor.substring(1).replace(/[^0-9]/g, '');
                 valor = valor.charAt(0) + cuerpoNumerico;
             }
-            
             e.target.value = valor;
         });
 
@@ -384,7 +344,7 @@
             const gps = document.getElementById('coordenadas').value || "No proporcionada";
             const desc = document.getElementById('descripcion').value;
             
-            const numTelf = "584128237598";
+            const numTelf = "+584246108913";
             const mensaje = `*SOLICITUD DE EMPRENDIMIENTO - HELADOS CALI EL TACÓN*\n\n` +
                             `👤 *Nombre:* ${nombre}\n` +
                             `🪪 *Cédula:* ${cedula}\n` +
