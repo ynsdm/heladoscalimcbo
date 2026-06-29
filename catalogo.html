@@ -193,7 +193,6 @@
         // --- COORDENADAS DE ORIGEN (Extraídas de tu ubicación de Maps) ---
         const ORIGEN_LAT = 10.64465;
         const ORIGEN_LON = -71.61806;
-        const COSTO_POR_KM = 0.50;
 
         // --- BASE DE DATOS REAL DE PRODUCTOS ---
         const productos = [
@@ -434,9 +433,31 @@
                     
                     input.value = `Lat: ${cLat}, Lon: ${cLon} (https://www.google.com/maps?q=${cLat},${cLon})`;
                     
-                    // Calcular kilómetros reales y multiplicar por la tarifa asignada ($0.50)
+                    // Calcular kilómetros reales entre el origen y el cliente
                     const kmDistancia = calcularDistanciaHaversine(ORIGEN_LAT, ORIGEN_LON, cLat, cLon);
-                    const costoCalculado = kmDistancia * COSTO_POR_KM;
+                    let costoCalculado = 0;
+
+                    // --- NUEVA LÓGICA DE TARIFAS FIJAS POR RANGOS DE KILOMETRAJE ---
+                    if (kmDistancia >= 0 && kmDistancia <= 3) {
+                        costoCalculado = 1.00;
+                    } else if (kmDistancia > 3 && kmDistancia <= 6) {
+                        costoCalculado = 2.00;
+                    } else if (kmDistancia > 6 && kmDistancia <= 9) {
+                        costoCalculado = 3.00;
+                    } else if (kmDistancia > 9 && kmDistancia <= 12) {
+                        costoCalculado = 4.00;
+                    } else if (kmDistancia > 12 && kmDistancia <= 15) {
+                        costoCalculado = 5.00;
+                    } else if (kmDistancia > 15 && kmDistancia <= 18) {
+                        costoCalculado = 6.00;
+                    } else if (kmDistancia > 18 && kmDistancia <= 21) {
+                        costoCalculado = 7.00;
+                    } else if (kmDistancia > 21 && kmDistancia <= 24) {
+                        costoCalculado = 8.00;
+                    } else {
+                        // Si pasa de 24.1 km se cobra 0.5$ por cada kilómetro total recorrido
+                        costoCalculado = kmDistancia * 0.50;
+                    }
 
                     infoDelivery = {
                         distancia: kmDistancia,
@@ -491,24 +512,27 @@
             let seccionDelivery = `🛵 *Modo de Entrega:* Retiro en Puerta 🏠\n`;
             if (infoDelivery) {
                 totalFinal += infoDelivery.precio;
-                seccionDelivery = `漏 *Modo de Entrega:* Delivery\n` +
+                seccionDelivery = `🛵 *Modo de Entrega:* Delivery\n` +
                                   `📍 *Ubicación:* ${gps}\n` +
-                                  `🛣️ *Distancia:* ${infoDelivery.distancia.toFixed(2)} km\n` +
+                                  `🇲 *Distancia:* ${infoDelivery.distancia.toFixed(2)} km\n` +
                                   `💵 *Costo Envío:* $${infoDelivery.precio.toFixed(2)}\n`;
             }
 
             const numTelf = "+584246108913";
             
-            const mensaje = `🛒 *NUEVA COMPRA - HELADOS CALI EL TACÓN*\n\n` +
-                            `👤 *Cliente:* ${nombre}\n` +
-                            `🪪 *Cédula:* ${cedula}\n` +
-                            `${seccionDelivery}\n` +
-                            `📝 *Detalle del Pedido:*\n${listaTexto}\n` +
-                            `💰 *TOTAL A PAGAR:* $${totalFinal.toFixed(2)}`;
+            let mensaje = `🛒 *NUEVA COMPRA - HELADOS CALI EL TACÓN*\n\n` +
+                          `👤 *Cliente:* ${nombre}\n` +
+                          `🪪 *Cédula:* ${cedula}\n` +
+                          `${seccionDelivery}\n` +
+                          `📝 *Detalle del Pedido:*\n${listaTexto}\n` +
+                          `💰 *Subtotal:* $${subtotal.toFixed(2)}\n` +
+                          `💵 *TOTAL A PAGAR:* $${totalFinal.toFixed(2)}`;
 
-            window.open(`https://api.whatsapp.com/send?phone=${numTelf}&text=${encodeURIComponent(mensaje)}`, '_blank');
+            let url = `https://api.whatsapp.com/send?phone=${numTelf}&text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
         });
 
+        // Inicializar el catálogo al cargar
         window.onload = inicializarCatalogo;
     </script>
 </body>
