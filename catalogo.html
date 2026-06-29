@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helados Cali - El Tacón | Catálogo</title>
+    <link rel="icon" type="image/png" href="diseños/icono.png">
+    <style>
+        /* --- PALETA DE COLORES CORPORATIVA (Helados Cali) --- */
+        :root {
+            --cali-blue: #0050a0;
+            --cali-blue-hover: #003a75;
+            --cali-red: #e31b23;
+            --cali-red-hover: #b81218;
+            --cali-yellow: #f9db00;
+            --background: #f0f7ff;
+            --text: #1a1a1a;
+            --card-bg: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--background); color: var(--text); padding-bottom: 5rem; overflow-x: hidden; }
+
+        /* --- NAVBAR --- */
+        nav { background: #fff; padding: 0.5rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 1000; border-bottom: 4px solid var(--cali-red); }
+        .logo-container { display: flex; align-items: center; gap: 0.8rem; }
+        .logo-img { height: 60px; width: auto; object-fit: contain; }
+        .logo-text { font-size: 1.4rem; font-weight: bold; color: var(--cali-blue); text-transform: uppercase; }
+        .nav-links a { text-decoration: none; color: var(--text); font-weight: 600; margin-left: 2rem; transition: color 0.3s; padding: 0.5rem; }
+        .nav-links a:hover, .nav-links a.active { color: var(--cali-red); border-bottom: 2px solid var(--cali-yellow); }
+
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .category-title { color: var(--cali-blue); margin: 2.5rem 0 1.2rem 0; border-left: 6px solid var(--cali-red); padding-left: 0.8rem; font-size: 1.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        /* --- GRID DE PRODUCTOS --- */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 2rem; }
+        .product-card { background: var(--card-bg); border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,80,160,0.05); border: 2px solid #cbdfff; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s ease-in-out; position: relative; }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,80,160,0.1); }
+        
+        .img-container { position: relative; width: 100%; height: 200px; background: #fff; }
+        .product-img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .product-info { padding: 1.2rem; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .product-name { font-size: 1.15rem; font-weight: bold; margin-bottom: 0.5rem; color: var(--text); }
+        .product-price { color: var(--cali-red); font-size: 1.35rem; font-weight: 700; }
+        
+        .add-btn { background: var(--cali-blue); color: white; border: none; width: 100%; padding: 0.8rem; font-weight: bold; font-size: 1rem; cursor: pointer; border-radius: 0 0 12px 12px; transition: background 0.2s; }
+        .add-btn:hover { background: var(--cali-blue-hover); }
+
+        /* --- CONTROL DE AGOTADO --- */
+        .product-card.agotado { opacity: 0.65; pointer-events: none; }
+        .product-card.agotado .add-btn { background: #888 !important; cursor: not-allowed; }
+        .badge-agotado { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); color: white; display: flex; justify-content: center; align-items: center; font-size: 1.4rem; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; z-index: 5; }
+
+        /* --- BARRA FLOTANTE DEL CARRITO --- */
+        .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; box-shadow: 0 -5px 25px rgba(0,0,0,0.1); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; z-index: 999; border-top: 3px solid var(--cali-blue); }
+        .cart-info { font-size: 1.2rem; font-weight: 600; color: var(--cali-blue); }
+        .cart-info span { color: var(--cali-red); font-weight: 700; }
+        .open-cart-btn { background: var(--cali-yellow); color: var(--text); border: 2px solid #d4ba00; padding: 0.8rem 1.8rem; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+        .open-cart-btn:hover { background: #ffe61a; }
+
+        /* --- PANEL LATERAL DEL CARRITO (OCULTABLE) --- */
+        .cart-sidebar { position: fixed; top: 0; right: -450px; width: 100%; max-width: 440px; height: 100%; background: #fff; z-index: 2000; box-shadow: -5px 0 30px rgba(0,0,0,0.15); transition: right 0.4s cubic-bezier(0.1, 0.8, 0.25, 1); display: flex; flex-direction: column; border-left: 4px solid var(--cali-blue); }
+        .cart-sidebar.active { right: 0; }
+        
+        .sidebar-header { padding: 1.5rem; background: var(--cali-blue); color: white; display: flex; justify-content: space-between; align-items: center; }
+        .sidebar-header h2 { font-size: 1.4rem; text-transform: uppercase; color: var(--cali-yellow); }
+        .close-sidebar { font-size: 2.2rem; cursor: pointer; background: none; border: none; color: #fff; transition: color 0.2s; }
+        .close-sidebar:hover { color: var(--cali-yellow); }
+
+        .cart-body { padding: 1.5rem; flex-grow: 1; overflow-y: auto; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; background: #f4f8ff; padding: 0.8rem 1rem; border-radius: 10px; border: 1px solid #cbdfff; }
+        .item-details h4 { font-size: 1rem; color: var(--text); }
+        .item-qty-controls { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.3rem; }
+        .qty-btn { background: #fff; border: 1px solid #cbdfff; width: 25px; height: 25px; font-weight: bold; cursor: pointer; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+        .qty-btn:hover { background: var(--cali-red); color: white; border-color: var(--cali-red); }
+        .item-price { font-weight: bold; color: var(--cali-blue); font-size: 1.05rem; text-align: right; }
+
+        /* --- FORMULARIO CHECKOUT --- */
+        .client-form { border-top: 3px dashed #cbdfff; padding: 1.5rem; background: #fafcff; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 0.3rem; font-size: 0.9rem; color: var(--cali-blue); }
+        .form-group input { width: 100%; padding: 0.7rem; border: 2px solid #cbdfff; border-radius: 8px; font-size: 0.95rem; outline: none; }
+        .form-group input:focus { border-color: var(--cali-red); }
+        .form-group input[readonly] { background-color: #f0f5fa; color: #555; cursor: not-allowed; }
+        .gps-btn { background: var(--cali-yellow); border: 1px solid #d4ba00; padding: 0.5rem 0.8rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; margin-top: 0.3rem; font-weight: bold; display: inline-flex; align-items: center; gap: 0.3rem; }
+        
+        .submit-order-btn { width: 100%; background: #25D366; color: white; border: none; padding: 1rem; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 0.5rem; box-shadow: 0 4px 12px rgba(37,211,102,0.2); }
+        
+        /* Capa de fondo oscura al abrir carrito */
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1500; }
+        .overlay.active { display: block; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-container">
+            <img src="diseños/logocali.webp" class="logo-img" alt="Logo Helados Cali">
+            <div class="logo-text">El Tacón</div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html" class="active">Catálogo</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Generación dinámica de secciones -->
+        <div id="catalog-content"></div>
+    </div>
+
+    <!-- BARRA INFERIOR DE ACCESO RÁPIDO -->
+    <div class="cart-bar">
+        <div class="cart-info">🛒 Artículos: <span id="cart-count">0</span> | Total: $<span id="cart-total">0.00</span></div>
+        <button class="open-cart-btn" onclick="toggleSidebar(true)">📋 Ver Mi Pedido</button>
+    </div>
+
+    <!-- CAPA OSCURA DE CONTROL -->
+    <div class="overlay" id="cartOverlay" onclick="toggleSidebar(false)"></div>
+
+    <!-- PANEL LATERAL DESPLEGABLE DEL CARRITO -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="sidebar-header">
+            <h2>Tu Carrito</h2>
+            <button class="close-sidebar" onclick="toggleSidebar(false)">&times;</button>
+        </div>
+        
+        <!-- Zona de artículos en tránsito -->
+        <div class="cart-body" id="cart-items-list"></div>
+
+        <!-- Formulario Requerido antes de procesar por WhatsApp -->
+        <form id="orderForm" class="client-form">
+            <h3 style="display:flex; justify-content:space-between; margin-bottom: 1.2rem; font-size: 1.25rem;">
+                <span>Total:</span> <span style="color:var(--cali-red); font-weight:800;">$<span id="modal-total">0.00</span></span>
+            </h3>
+            
+            <div class="form-group">
+                <label>Nombre y Apellido</label>
+                <input type="text" id="order-nombre" required placeholder="Tu nombre completo">
+            </div>
+            <div class="form-group">
+                <label>Cédula</label>
+                <input type="text" id="order-cedula" required maxlength="12" placeholder="Ej. V26123456">
+            </div>
+            <div class="form-group">
+                <label>Ubicación de Despacho (GPS)</label>
+                <button type="button" class="gps-btn" onclick="obtenerGpsPedido()">📍 Localizar mi dirección</button>
+                <span id="orderGpsStatus" style="font-size: 0.8rem; display:block; margin-top:0.3rem; color:#666;">Ubicación no fijada.</span>
+                <input type="text" id="order-gps" readonly placeholder="Presiona el botón para fijar ubicación" style="margin-top: 0.4rem;">
+            </div>
+            <button type="submit" class="submit-order-btn">Confirmar Pedido vía WhatsApp</button>
+        </form>
+    </div>
+
+  <script>
+        // --- BASE DE DATOS REAL DE PRODUCTOS ---
+const productos = [
+    { id: 1, categoria: "barquillas", nombre: "BARQUILLA DE AREQUIPE", precio: 1.28, disponible: true, img: "diseños/barquillaarequipe.webp" },
+    { id: 2, categoria: "barquillas", nombre: "BARQUILLA MANTECADO", precio: 1.28, disponible: true, img: "diseños/barquillamantecado.webp" },
+    { id: 4, categoria: "barquillas", nombre: "BARQUILLA DE CHOCOLATE", precio: 1.28, disponible: true, img: "diseños/barquillachocolate.webp" },
+    { id: 9, categoria: "barquillas", nombre: "CONO CHICLE UVA", precio: 0.85, disponible: true, img: "diseños/conochicleuva.jpg" },
+    { id: 10, categoria: "paletas", nombre: "MAX POLET", precio: 1.57, disponible: true, img: "diseños/maxpolet.webp" },
+    { id: 11, categoria: "paletas", nombre: "PALETA CHOCOMANTECADO", precio: 0.85, disponible: true, img: "diseños/paletachocomantecado.jpg" },
+    { id: 12, categoria: "paletas", nombre: "PALETA CHOCOMANI", precio: 0.85, disponible: true, img: "diseños/paletachocomani.jpg" },
+    { id: 13, categoria: "paletas", nombre: "PALETA WONDER", precio: 0.85, disponible: true, img: "diseños/paletawonder.webp" },
+    { id: 14, categoria: "paletas", nombre: "PALETA DONUTS", precio: 0.85, disponible: true, img: "diseños/paletadonut.webp" },
+    { id: 15, categoria: "paletas", nombre: "POLET CRUNCH WHITE", precio: 1.57, disponible: true, img: "diseños/poletcrunchwhite.webp" },
+    { id: 16, categoria: "paletas", nombre: "POLET FERRERO ROCHER", precio: 2.32, disponible: true, img: "diseños/poletferrerorocher.webp" },
+    { id: 17, categoria: "paletas", nombre: "PALETA MAUSI", precio: 0.85, disponible: true, img: "diseños/paletamausi.webp" },
+    { id: 18, categoria: "paletas", nombre: "PALETA PASION", precio: 0.55, disponible: true, img: "diseños/paletapasion.jpg" },
+    { id: 19, categoria: "paletas", nombre: "PAL EXOTICO", precio: 0.55, disponible: false, img: "diseños/paletaexotico.webp" },
+    { id: 20, categoria: "paletas", nombre: "PAL CHOCOMANI AREQUIPE", precio: 0.85, disponible: false, img: "diseños/palchocomaniarequipe.webp" },
+    { id: 21, categoria: "paletas", nombre: "CASERO GUANABANA", precio: 0.55, disponible: true, img: "diseños/paletacaseroguanabana.jpg" },
+    { id: 22, categoria: "paletas", nombre: "POLET TRIPLE CAPITA FRAMBUESA", precio: 2.32, disponible: true, img: "diseños/polettriplecapitaframbuesa.jpg" },
+    { id: 23, categoria: "paletas", nombre: "POLET COCO AREQUIPE", precio: 2.32, disponible: true, img: "diseños/poletcocoarequipe.webp" },
+    { id: 24, categoria: "paletas", nombre: "PALETA FRESH FRESA", precio: 0.37, disponible: true, img: "diseños/paletafreshfresa.webp" },
+    { id: 26, categoria: "paletas", nombre: "PAL FRESH LIMON", precio: 0.37, disponible: false, img: "diseños/palfreshlimon.png" },
+    { id: 27, categoria: "paletas", nombre: "PALETA PAW PATROL", precio: 0.43, disponible: true, img: "diseños/paletapawpatrol.webp" },
+    { id: 28, categoria: "paletas", nombre: "PALETA PONCHE CREMA", precio: 0.82, disponible: false, img: "diseños/paletaponchecrema.webp" },
+    { id: 30, categoria: "potes de litro", nombre: "POTE 1 TRISABOR", precio: 7.92, disponible: true, img: "diseños/potetrisabor.jpg" },
+    { id: 31, categoria: "potes de litro", nombre: "POTE 1 FRESA", precio: 7.92, disponible: true, img: "diseños/potefresa.webp" },
+    { id: 32, categoria: "potes de litro", nombre: "POTE 1L MANTECADO", precio: 7.92, disponible: true, img: "diseños/potemantecado.webp" },
+    { id: 34, categoria: "potes de litro", nombre: "POTE 1L CHOCOLATE", precio: 7.92, disponible: true, img: "diseños/potechocolate.webp" },
+    { id: 45, categoria: "potes grandes", nombre: "POTE 4.7 TRISABOR", precio: 24.36, disponible: true, img: "diseños/potetrisabor.jpg" },
+    { id: 46, categoria: "potes grandes", nombre: "POTE 4.7 FRESA", precio: 24.36, disponible: false, img: "diseños/potefresa.webp" },
+    { id: 48, categoria: "potes grandes", nombre: "POTE 4.7 MANTECADO", precio: 24.36, disponible: true, img: "diseños/potemantecado.webp" },
+    { id: 50, categoria: "potes grandes", nombre: "POTE 4.7 CHOCOLATE", precio: 24.36, disponible: false, img: "diseños/potechocolate.webp" },
+    { id: 57, categoria: "700cc y rollo", nombre: "POTE 700 CC POLET BELGA", precio: 7.92, disponible: false, img: "diseños/poletbelga.webp" },
+    { id: 60, categoria: "700cc y rollo", nombre: "ROLLO DE HELADO FRESA 900 CC", precio: 10.45, disponible: true, img: "diseños/rollofresa.webp" },
+    { id: 61, categoria: "700cc y rollo", nombre: "ROLLO DE HELADO AREQUIPE 900CC", precio: 10.45, disponible: false, img: "diseños/rolloarequipe.webp" },
+    { id: 62, categoria: "sandwich", nombre: "MAXI SANDWINCH MANTECADO", precio: 1.04, disponible: false, img: "diseños/maxisandwinchmantecado.png" },
+    { id: 63, categoria: "sandwich", nombre: "MAXI SANDWICH VAINILLA FRESA", precio: 1.04, disponible: true, img: "diseños/maxisandwichvainillafresa.png" },
+    { id: 64, categoria: "sandwich", nombre: "MAXI SANDWICH VAINILLA", precio: 1.04, disponible: false, img: "diseños/maxisandwichvainilla.png" },
+    { id: 65, categoria: "sandwich", nombre: "MAXI SANDWICH RON PASA", precio: 1.04, disponible: false, img: "diseños/maxisandwichronpasa.png" },
+    { id: 66, categoria: "tinitas", nombre: "TINITA CHOCOLISIMO", precio: 0.68, disponible: true, img: "diseños/tinitachocolisimo.jpg" },
+    { id: 67, categoria: "tinitas", nombre: "TINITA CHOCOMANTECADO", precio: 0.68, disponible: true, img: "diseños/tinitachocomantecado.webp" },
+    { id: 68, categoria: "tinitas", nombre: "TINITA SENSACION", precio: 0.68, disponible: true, img: "diseños/tinitasensacion.jpg" },
+    { id: 69, categoria: "tinitas", nombre: "TINITA COOKIES CREAM", precio: 0.68, disponible: false, img: "diseños/tinitacookies.webp" },
+    { id: 70, categoria: "tinitas", nombre: "TINITA RON PASAS", precio: 0.68, disponible: false, img: "diseños/tinitaronpasas.webp" },
+    { id: 71, categoria: "tinitas", nombre: "TINITA SORPRESA", precio: 1.52, disponible: true, img: "diseños/tinitasorpresa.jpeg" },
+    { id: 72, categoria: "varios", nombre: "BARQUILLAS", precio: 0.12, disponible: true, img: "diseños/barquillas.jpg" },
+    { id: 73, categoria: "varios", nombre: "AFICHE", precio: 2.44, disponible: true, img: "diseños/afiche.jpg" },
+    { id: 74, categoria: "varios", nombre: "BOLSO TERMICO", precio: 17.05, disponible: false, img: "diseños/bolsotermico.png" }
+];
+
+        let carrito = [];
+
+        // Nombres limpios para visualización de las categorías pedidas
+        const categoriasMapeo = {
+            "tinitas": "Tinitas",
+            "paletas": "Paletas",
+            "barquillas": "Barquillas y conos",
+            "700cc y rollo": "700cc y Rollos",
+            "potes de litro": "Potes de Litro",
+            "potes grandes": "Potes de 4.7 Litros",
+            "varios": "Varios"
+        };
+
+        // --- CONSTRUCCIÓN DEL CATÁLOGO ---
+        function inicializarCatalogo() {
+            const container = document.getElementById('catalog-content');
+            container.innerHTML = ''; // Limpiar previo
+            
+            Object.keys(categoriasMapeo).forEach(catKey => {
+                const prodFiltrados = productos.filter(p => p.categoria === catKey);
+                if (prodFiltrados.length === 0) return;
+
+                const section = document.createElement('section');
+                section.innerHTML = `<h2 class="category-title">${categoriasMapeo[catKey]}</h2>`;
+                
+                const grid = document.createElement('div');
+                grid.className = 'products-grid';
+
+                prodFiltrados.forEach(p => {
+                    const statusClass = p.disponible ? '' : 'agotado';
+                    const badge = p.disponible ? '' : '<div class="badge-agotado">Agotado</div>';
+                    
+                    grid.innerHTML += `
+                        <div class="product-card ${statusClass}">
+                            <div class="img-container">
+                                ${badge}
+                                <img src="${p.img}" class="product-img" alt="${p.nombre}">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-name">${p.nombre}</div>
+                                <div class="product-price">$${p.precio.toFixed(2)}</div>
+                            </div>
+                            <button class="add-btn" onclick="agregarAlCarrito(${p.id})">
+                                ${p.disponible ? 'Agregar al Pedido' : 'No Disponible'}
+                            </button>
+                        </div>
+                    `;
+                });
+                section.appendChild(grid);
+                container.appendChild(section);
+            });
+        }
+
+        // --- MANEJO DEL PANEL LATERAL ---
+        function toggleSidebar(open) {
+            document.getElementById('cartSidebar').classList.toggle('active', open);
+            document.getElementById('cartOverlay').classList.toggle('active', open);
+            if(open) renderItemsSidebar();
+        }
+
+        // --- GESTIÓN DINÁMICA DEL CARRITO ---
+        function agregarAlCarrito(id) {
+            const prod = productos.find(p => p.id === id);
+            if (!prod || !prod.disponible) return; 
+
+            const existe = carrito.find(item => item.id === id);
+            if (existe) {
+                existe.cantidad++;
+            } else {
+                carrito.push({ ...prod, cantidad: 1 });
+            }
+            actualizarIndicadores();
+        }
+
+        function cambiarCantidad(id, cambio) {
+            const item = carrito.find(p => p.id === id);
+            if (!item) return;
+
+            item.cantidad += cambio;
+            if (item.cantidad <= 0) {
+                carrito = carrito.filter(p => p.id !== id);
+            }
+            actualizarIndicadores();
+            renderItemsSidebar();
+        }
+
+        function actualizarIndicadores() {
+            const count = carrito.reduce((acc, item) => acc + item.cantidad, 0);
+            const total = carrito.reduce((acc, item) => acc + (item.cantidad * item.precio), 0);
+            
+            document.getElementById('cart-count').innerText = count;
+            document.getElementById('cart-total').innerText = total.toFixed(2);
+            document.getElementById('modal-total').innerText = total.toFixed(2);
+        }
+
+        function renderItemsSidebar() {
+            const container = document.getElementById('cart-items-list');
+            if (carrito.length === 0) {
+                container.innerHTML = `<p style="text-align:center; padding: 2rem; color:#888;">El carrito está vacío. ¡Elige tus helados!</p>`;
+                return;
+            }
+            container.innerHTML = '';
+            carrito.forEach(item => {
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <div class="item-details">
+                            <h4>${item.nombre}</h4>
+                            <div class="item-qty-controls">
+                                <button type="button" class="qty-btn" onclick="cambiarCantidad(${item.id}, -1)">-</button>
+                                <span>${item.cantidad}</span>
+                                <button type="button" class="qty-btn" onclick="cambiarCantidad(${item.id}, 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="item-price">$${(item.precio * item.cantidad).toFixed(2)}</div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- CAPTURA DE CÉDULA FILTRADA ---
+        const cedulaInput = document.getElementById('order-cedula');
+        cedulaInput.addEventListener('input', (e) => {
+            let valor = e.target.value.toUpperCase();
+            if (valor.length > 0) {
+                const primeraLetra = valor.charAt(0);
+                if (!['V', 'E', 'J'].includes(primeraLetra)) { valor = ''; }
+            }
+            if (valor.length > 1) {
+                const cuerpoNumerico = valor.substring(1).replace(/[^0-9]/g, '');
+                valor = valor.charAt(0) + cuerpoNumerico;
+            }
+            e.target.value = valor;
+        });
+
+        // --- GEOLOCALIZACIÓN DEL PEDIDO ---
+        function obtenerGpsPedido() {
+            const status = document.getElementById('orderGpsStatus');
+            const input = document.getElementById('order-gps');
+            if (!navigator.geolocation) {
+                status.innerText = "❌ Tu navegador no soporta geolocalización.";
+                status.style.color = "red";
+                return;
+            }
+
+            status.innerText = "Buscando coordenadas...";
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    input.value = `Lat: ${pos.coords.latitude}, Lon: ${pos.coords.longitude} (https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude})`;
+                    status.innerText = "✅ Dirección de entrega cargada.";
+                    status.style.color = "green";
+                },
+                () => { 
+                    status.innerText = "❌ No se pudo obtener la ubicación automáticamente."; 
+                    status.style.color = "red"; 
+                }
+            );
+        }
+
+        // --- ENVIAR CHECKOUT A WHATSAPP ---
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if(carrito.length === 0) { alert("Tu carrito está vacío."); return; }
+
+            const gps = document.getElementById('order-gps').value;
+            
+            // VALIDACIÓN ESTRICTA DE GPS
+            if(!gps || gps.trim() === "") {
+                alert("⚠️ Por favor, debes localizar tu dirección haciendo clic en el botón '📍 Localizar mi dirección' antes de continuar.");
+                return;
+            }
+
+            const nombre = document.getElementById('order-nombre').value;
+            const cedula = document.getElementById('order-cedula').value;
+
+            let listaTexto = "";
+            carrito.forEach(item => {
+                listaTexto += `• ${item.cantidad}x ${item.nombre} -> $${(item.precio * item.cantidad).toFixed(2)}\n`;
+            });
+
+            const total = carrito.reduce((acc, item) => acc + (item.cantidad * item.precio), 0);
+            const numTelf = "584128237598";
+            
+            const mensaje = `🛒 *NUEVA COMPRA - HELADOS CALI EL TACÓN*\n\n` +
+                            `👤 *Cliente:* ${nombre}\n` +
+                            `🪪 *Cédula:* ${cedula}\n` +
+                            `📍 *Ubicación:* ${gps}\n\n` +
+                            `📝 *Detalle del Pedido:*\n${listaTexto}\n` +
+                            `💰 *TOTAL A PAGAR:* $${total.toFixed(2)}`;
+
+            window.open(`https://api.whatsapp.com/send?phone=${numTelf}&text=${encodeURIComponent(mensaje)}`, '_blank');
+        });
+
+        window.onload = inicializarCatalogo;
+    </script>
+</body>
+</html>
