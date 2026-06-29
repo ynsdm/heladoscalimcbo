@@ -75,12 +75,16 @@
 
         .cart-body { padding: 1.2rem; flex-grow: 1; overflow-y: auto; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; background: #f4f8ff; padding: 0.8rem; border-radius: 10px; border: 1px solid #cbdfff; gap: 0.5rem; }
+        .cart-item.delivery-item { background: #ffebeb; border: 1px solid #ffb6b6; }
         .item-details { flex-grow: 1; }
         .item-details h4 { font-size: 0.95rem; color: var(--text); line-height: 1.2; }
         .item-qty-controls { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.4rem; }
         .qty-btn { background: #fff; border: 1px solid #cbdfff; width: 28px; height: 28px; font-weight: bold; font-size: 1.1rem; cursor: pointer; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
         .qty-btn:hover { background: var(--cali-red); color: white; border-color: var(--cali-red); }
+        .remove-delivery-btn { background: var(--cali-red); color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition: background 0.2s; margin-top: 0.4rem; }
+        .remove-delivery-btn:hover { background: var(--cali-red-hover); }
         .item-price { font-weight: bold; color: var(--cali-blue); font-size: 1rem; text-align: right; min-width: 65px; }
+        .cart-item.delivery-item .item-price { color: var(--cali-red); }
 
         /* --- FORMULARIO CHECKOUT --- */
         .client-form { border-top: 3px dashed #cbdfff; padding: 1.2rem; background: #fafcff; max-height: 50vh; overflow-y: auto; }
@@ -186,6 +190,11 @@
     </div>
 
     <script>
+        // --- COORDENADAS DE ORIGEN (Extraídas de tu ubicación de Maps) ---
+        const ORIGEN_LAT = 10.64465;
+        const ORIGEN_LON = -71.61806;
+        const COSTO_POR_KM = 0.50;
+
         // --- BASE DE DATOS REAL DE PRODUCTOS ---
         const productos = [
             { id: 1, categoria: "barquillas", nombre: "BARQUILLA DE AREQUIPE", precio: 1.28, disponible: true, img: "diseños/barquillaarequipe.webp" },
@@ -237,6 +246,7 @@
         ];
 
         let carrito = [];
+        let infoDelivery = null; // Guardará el objeto de delivery si aplica
 
         const categoriasMapeo = {
             "tinitas": "Tinitas",
@@ -297,7 +307,6 @@
         function toggleSidebar(open) {
             document.getElementById('cartSidebar').classList.toggle('active', open);
             document.getElementById('cartOverlay').classList.toggle('active', open);
-            // Cerrar menú móvil al abrir el carrito si está abierto
             document.getElementById('navLinks').classList.remove('mobile-active');
             if(open) renderItemsSidebar();
         }
@@ -328,9 +337,23 @@
             renderItemsSidebar();
         }
 
+        // Remover explícitamente el delivery del carrito (Retiro en Puerta)
+        function eliminarDelivery() {
+            infoDelivery = null;
+            document.getElementById('order-gps').value = "";
+            document.getElementById('orderGpsStatus').innerText = "🏠 Retiro en puerta seleccionado.";
+            document.getElementById('orderGpsStatus').style.color = "#0050a0";
+            actualizarIndicadores();
+            renderItemsSidebar();
+        }
+
         function actualizarIndicadores() {
             const count = carrito.reduce((acc, item) => acc + item.cantidad, 0);
-            const total = carrito.reduce((acc, item) => acc + (item.cantidad * item.precio), 0);
+            let total = carrito.reduce((acc, item) => acc + (item.cantidad * item.precio), 0);
+            
+            if (infoDelivery) {
+                total += infoDelivery.precio;
+            }
             
             document.getElementById('cart-count').innerText = count;
             document.getElementById('cart-total').innerText = total.toFixed(2);
@@ -339,11 +362,13 @@
 
         function renderItemsSidebar() {
             const container = document.getElementById('cart-items-list');
-            if (carrito.length === 0) {
+            if (carrito.length === 0 && !infoDelivery) {
                 container.innerHTML = `<p style="text-align:center; padding: 2rem; color:#888;">El carrito está vacío. ¡Elige tus helados!</p>`;
                 return;
             }
             container.innerHTML = '';
+            
+            // Renderizar los helados del cliente
             carrito.forEach(item => {
                 container.innerHTML += `
                     <div class="cart-item">
@@ -359,6 +384,76 @@
                     </div>
                 `;
             });
+
+            // Si hay un cálculo de delivery activo, se inyecta como un ítem especial interactivo
+            if (infoDelivery) {
+                container.innerHTML += `
+                    <div class="cart-item delivery-item">
+                        <div class="item-details">
+                            <h4>🛵 SERVICIO DE DELIVERY</h4>
+                            <small style="color:#555; display:block;">Distancia: ${infoDelivery.distancia.toFixed(2)} km</small>
+                            <button type="button" class="remove-delivery-btn" onclick="eliminarDelivery()">❌ Retirar en Puerta</button>
+                        </div>
+                        <div class="item-price">$${infoDelivery.precio.toFixed(2)}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // --- FÓRMULA MATEMÁTICA DE HAVERSINE ---
+        function calcularDistanciaHaversine(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Radio de la Tierra en Kilómetros
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+                      
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c; 
+        }
+
+        // --- GEOLOCALIZACIÓN Y COTIZACIÓN AUTOMÁTICA ---
+        function obtenerGpsPedido() {
+            const status = document.getElementById('orderGpsStatus');
+            const input = document.getElementById('order-gps');
+            if (!navigator.geolocation) {
+                status.innerText = "❌ Tu navegador no soporta geolocalización.";
+                status.style.color = "red";
+                return;
+            }
+
+            status.innerText = "Calculando distancia de entrega...";
+            status.style.color = "#666";
+            
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const cLat = pos.coords.latitude;
+                    const cLon = pos.coords.longitude;
+                    
+                    input.value = `Lat: ${cLat}, Lon: ${cLon} (https://www.google.com/maps?q=${cLat},${cLon})`;
+                    
+                    // Calcular kilómetros reales y multiplicar por la tarifa asignada ($0.50)
+                    const kmDistancia = calcularDistanciaHaversine(ORIGEN_LAT, ORIGEN_LON, cLat, cLon);
+                    const costoCalculado = kmDistancia * COSTO_POR_KM;
+
+                    infoDelivery = {
+                        distancia: kmDistancia,
+                        precio: costoCalculado
+                    };
+
+                    status.innerText = `✅ ¡Delivery calculado exitosamente! (${kmDistancia.toFixed(2)} km)`;
+                    status.style.color = "green";
+                    
+                    actualizarIndicadores();
+                    renderItemsSidebar();
+                },
+                () => { 
+                    status.innerText = "❌ Error al obtener tu ubicación GPS."; 
+                    status.style.color = "red"; 
+                }
+            );
         }
 
         // --- CAPTURA DE CÉDULA FILTRADA ---
@@ -376,59 +471,40 @@
             e.target.value = valor;
         });
 
-        // --- GEOLOCALIZACIÓN DEL PEDIDO ---
-        function obtenerGpsPedido() {
-            const status = document.getElementById('orderGpsStatus');
-            const input = document.getElementById('order-gps');
-            if (!navigator.geolocation) {
-                status.innerText = "❌ Tu navegador no soporta geolocalización.";
-                status.style.color = "red";
-                return;
-            }
-
-            status.innerText = "Buscando coordenadas...";
-            navigator.geolocation.getCurrentPosition(
-                (pos) => {
-                    input.value = `Lat: ${pos.coords.latitude}, Lon: ${pos.coords.longitude} (https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude})`;
-                    status.innerText = "✅ Dirección de entrega cargada.";
-                    status.style.color = "green";
-                },
-                () => { 
-                    status.innerText = "❌ No se pudo obtener la ubicación automáticamente."; 
-                    status.style.color = "red"; 
-                }
-            );
-        }
-
         // --- ENVIAR CHECKOUT A WHATSAPP ---
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
             if(carrito.length === 0) { alert("Tu carrito está vacío."); return; }
 
-            const gps = document.getElementById('order-gps').value;
-            
-            if(!gps || gps.trim() === "") {
-                alert("⚠️ Por favor, debes localizar tu dirección haciendo clic en el botón '📍 Localizar mi dirección' antes de continuar.");
-                return;
-            }
-
             const nombre = document.getElementById('order-nombre').value;
             const cedula = document.getElementById('order-cedula').value;
+            const gps = document.getElementById('order-gps').value;
 
             let listaTexto = "";
             carrito.forEach(item => {
                 listaTexto += `• ${item.cantidad}x ${item.nombre} -> $${(item.precio * item.cantidad).toFixed(2)}\n`;
             });
 
-            const total = carrito.reduce((acc, item) => acc + (item.cantidad * item.precio), 0);
+            let subtotal = carrito.reduce((acc, item) => acc + (item.cantidad * item.precio), 0);
+            let totalFinal = subtotal;
+
+            let seccionDelivery = `🛵 *Modo de Entrega:* Retiro en Puerta 🏠\n`;
+            if (infoDelivery) {
+                totalFinal += infoDelivery.precio;
+                seccionDelivery = `漏 *Modo de Entrega:* Delivery\n` +
+                                  `📍 *Ubicación:* ${gps}\n` +
+                                  `🛣️ *Distancia:* ${infoDelivery.distancia.toFixed(2)} km\n` +
+                                  `💵 *Costo Envío:* $${infoDelivery.precio.toFixed(2)}\n`;
+            }
+
             const numTelf = "+584246108913";
             
             const mensaje = `🛒 *NUEVA COMPRA - HELADOS CALI EL TACÓN*\n\n` +
                             `👤 *Cliente:* ${nombre}\n` +
                             `🪪 *Cédula:* ${cedula}\n` +
-                            `📍 *Ubicación:* ${gps}\n\n` +
+                            `${seccionDelivery}\n` +
                             `📝 *Detalle del Pedido:*\n${listaTexto}\n` +
-                            `💰 *TOTAL A PAGAR:* $${total.toFixed(2)}`;
+                            `💰 *TOTAL A PAGAR:* $${totalFinal.toFixed(2)}`;
 
             window.open(`https://api.whatsapp.com/send?phone=${numTelf}&text=${encodeURIComponent(mensaje)}`, '_blank');
         });
