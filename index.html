@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Helados Cali - El Tacón | Inicio</title>
     <link rel="icon" type="image/png" href="diseños/icono.png">
+    
     <style>
         /* --- PALETA DE COLORES CORPORATIVA (Helados Cali) --- */
         :root {
@@ -25,8 +26,27 @@
         .logo-container { display: flex; align-items: center; gap: 0.8rem; }
         .logo-img { height: 60px; width: auto; object-fit: contain; }
         .logo-text { font-size: 1.4rem; font-weight: bold; color: var(--cali-blue); text-transform: uppercase; }
+        .nav-links { display: flex; align-items: center; }
         .nav-links a { text-decoration: none; color: var(--text); font-weight: 600; margin-left: 2rem; transition: color 0.3s; padding: 0.5rem; }
         .nav-links a:hover, .nav-links a.active { color: var(--cali-red); border-bottom: 2px solid var(--cali-yellow); }
+
+        /* --- BOTÓN PARA EL MODAL (Integrado en el Nav) --- */
+        .btn-abrir {
+            margin-left: 2rem;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.95rem;
+            font-weight: bold;
+            background-color: var(--cali-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .btn-abrir:hover {
+            background-color: var(--cali-blue-hover);
+            transform: translateY(-1px);
+        }
 
         /* --- BANNER INTERACTIVO --- */
         .banner-container { position: relative; width: 100%; height: 450px; overflow: hidden; background: var(--cali-blue); }
@@ -96,6 +116,74 @@
 
         @keyframes grow { from { height: 0; } }
 
+        /* --- ESTILOS DE LA PANTALLA EMERGENTE (MODAL) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 2000; /* Por encima de la navegación fija */
+        }
+        .modal-overlay.mostrar {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 15px;
+            position: relative;
+            width: 90%;
+            max-width: 640px;
+            border: 3px solid var(--cali-yellow);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .btn-cerrar {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background-color: var(--cali-red);
+            color: white;
+            border: 2px solid white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+        .btn-cerrar:hover {
+            transform: scale(1.1);
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
         /* ==========================================
            --- ADAPTACIÓN PARA MÓVILES Y TABLETS ---
            ========================================== */
@@ -104,7 +192,9 @@
             .logo-container { flex-direction: column; gap: 0.2rem; }
             .logo-img { height: 45px; }
             .logo-text { font-size: 1.2rem; }
+            .nav-links { flex-direction: column; gap: 0.5rem; width: 100%; }
             .nav-links a { margin: 0 0.5rem; font-size: 0.95rem; }
+            .btn-abrir { margin: 0.5rem 0 0 0; width: 100%; max-width: 200px; text-align: center; }
 
             .banner-container { height: 300px; }
             .slide-content { padding: 1rem; }
@@ -137,6 +227,7 @@
 </head>
 <body>
 
+    <!-- --- NAVBAR CORREGIDO --- -->
     <nav>
         <div class="logo-container">
             <img src="diseños/logocali.webp" class="logo-img" alt="Logo Helados Cali">
@@ -145,9 +236,23 @@
         <div class="nav-links">
             <a href="index.html" class="active">Inicio</a>
             <a href="catalogo.html">Catálogo</a>
+            <!-- Botón del Video integrado aquí -->
+            <button class="btn-abrir" id="openBtn">Ver Video</button>
         </div>
     </nav>
 
+    <!-- --- ESTRUCTURA DEL MODAL EMERGENTE --- -->
+    <div class="modal-overlay" id="videoModal">
+        <div class="modal-content">
+            <button class="btn-cerrar" id="closeBtn">&times;</button>
+            <div class="video-container">
+                <!-- Cambia 'dQw4w9WgXcQ' por el ID de tu video corporativo de YouTube -->
+                <iframe id="youtubeVideo" src="https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- --- BANNER INTERACTIVO --- -->
     <div class="banner-container">
         <button class="banner-btn prev" onclick="changeSlide(-1)">&#10094;</button>
         <button class="banner-btn next" onclick="changeSlide(1)">&#10095;</button>
@@ -169,6 +274,7 @@
         </div>
     </div>
 
+    <!-- --- SECCIÓN RENTABILIDAD --- -->
     <section class="section">
         <h2>Rentabilidad Extraordinaria</h2>
         <p>El modelo de Helados Cali te permite vender por volumen, dinamizando tu flujo de caja todos los días del año.</p>
@@ -186,7 +292,7 @@
 
         <div class="chart-box">
             <h3>Proyección de Inversión Semanal vs Mensual</h3>
-            <p style="max-width:600px; margin-bottom: 1rem;">Si inviertes consecutivamente <strong>$80 semanales</strong> en nuestros productos, tu retorno mensual superará las expectativas gracias a la venta por volumen:</p>
+            <p style="max-width:600px; margin-bottom: 1rem;">Si inviertes consecutivamente <strong>$80 semanales</strong> in nuestros productos, tu retorno mensual superará las expectativas gracias a la venta por volumen:</p>
             <div class="bar-container">
                 <div class="bar invertido"><span>$320</span></div>
                 <div class="bar ganancia"><span>+$416</span></div>
@@ -198,6 +304,7 @@
         </div>
     </section>
 
+    <!-- --- FORMULARIO FIJO Y VALIDADO --- -->
     <section class="section" id="emprende">
         <div class="form-bg">
             <h2 style="margin-bottom: 2rem; color: var(--cali-blue);">🚀 Emprende Con Nosotros</h2>
@@ -232,6 +339,7 @@
         </div>
     </section>
 
+    <!-- --- MISION Y VISION --- -->
     <section class="section">
         <div class="mv-container">
             <div class="mv-box">
@@ -245,6 +353,7 @@
         </div>
     </section>
 
+    <!-- --- REDES SOCIALES --- -->
     <div class="redes-sociales-container">
         <h3>¡Síguenos en nuestras redes!</h3>
         <p>Mantente al tanto de nuestros nuevos sabores y promociones</p>
@@ -266,11 +375,45 @@
         </div>
     </div>
 
+    <!-- --- FOOTER --- -->
     <footer>
         <p>&copy; 2026 Helados Cali - El Tacón. Todos los derechos reservados.</p>
     </footer>
 
+    <!-- --- LÓGICA DE JAVASCRIPT --- -->
     <script>
+        // --- CONTROL DEL MODAL EMERGENTE (VIDEO DE YOUTUBE) ---
+   const openBtn = document.getElementById('openBtn');
+const closeBtn = document.getElementById('closeBtn');
+const videoModal = document.getElementById('videoModal');
+const youtubeVideo = document.getElementById('youtubeVideo');
+const videoSrc = youtubeVideo.src;
+
+// NUEVO: Abre el modal automáticamente al cargar la página
+window.addEventListener('DOMContentLoaded', () => {
+    videoModal.classList.add('mostrar');
+});
+
+// Abrir ventana emergente manualmente (al hacer clic en el botón del menú)
+openBtn.addEventListener('click', () => {
+    videoModal.classList.add('mostrar');
+});
+
+// Cerrar ventana emergente deteniendo el video
+const cerrarModal = () => {
+    videoModal.classList.remove('mostrar');
+    youtubeVideo.src = '';
+    youtubeVideo.src = videoSrc;
+};
+
+closeBtn.addEventListener('click', cerrarModal);
+
+videoModal.addEventListener('click', (e) => {
+    if (e.target === videoModal) {
+        cerrarModal();
+    }
+});
+
         // --- BANNER INTERACTIVO ---
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
