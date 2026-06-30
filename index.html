@@ -66,15 +66,16 @@
         .stat-card { background: var(--card-bg); padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,80,160,0.05); border: 2px solid #cbdfff; position: relative; }
         .stat-card h3 { font-size: 3rem; color: var(--cali-red); margin-bottom: 0.5rem; }
         
-        /* Gráfica Visual CSS */
+        /* Gráfica Visual CSS Optimizada */
         .chart-box { background: #fff; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin-top: 3rem; display: flex; flex-direction: column; align-items: center; border: 1px solid #cbdfff; }
-        .bar-container { display: flex; align-items: flex-end; justify-content: center; gap: 3rem; height: 200px; width: 100%; max-width: 500px; margin-top: 2rem; border-bottom: 3px solid var(--cali-blue); }
+        .chart-wrapper { display: flex; justify-content: center; gap: 3rem; width: 100%; max-width: 500px; margin-top: 2rem; }
+        .chart-column { display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .bar-container { display: flex; align-items: flex-end; height: 200px; width: 100%; border-bottom: 3px solid var(--cali-blue); justify-content: center; }
         .bar { width: 80px; background: #ddd; border-top-left-radius: 8px; border-top-right-radius: 8px; position: relative; animation: grow 1.5s ease-out forwards; }
         .bar.invertido { background: var(--cali-yellow); height: 40%; border: 2px solid #d4ba00; }
         .bar.ganancia { background: var(--cali-red); height: 75%; }
         .bar span { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); font-weight: bold; color: var(--text); }
-        .chart-labels { display: flex; justify-content: center; gap: 5.5rem; margin-top: 0.5rem; }
-        .bar-label { font-weight: 600; font-size: 0.9rem; text-align: center; }
+        .bar-label { font-weight: 600; font-size: 0.9rem; text-align: center; margin-top: 0.8rem; min-height: 40px; }
 
         /* --- FORMULARIO FIJO Y VALIDADO --- */
         .form-bg { background: #fff; padding: 4rem 2rem; border-radius: 30px; margin: 3rem auto; max-width: 700px; box-shadow: 0 15px 30px rgba(0,0,0,0.05); border: 3px solid var(--cali-blue); }
@@ -130,7 +131,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
-            z-index: 2000; /* Por encima de la navegación fija */
+            z-index: 2000;
         }
         .modal-overlay.mostrar {
             opacity: 1;
@@ -188,46 +189,56 @@
            --- ADAPTACIÓN PARA MÓVILES Y TABLETS ---
            ========================================== */
         @media (max-width: 768px) {
-            nav { padding: 0.8rem 1rem; flex-direction: column; gap: 0.5rem; text-align: center; }
-            .logo-container { flex-direction: column; gap: 0.2rem; }
-            .logo-img { height: 45px; }
-            .logo-text { font-size: 1.2rem; }
-            .nav-links { flex-direction: column; gap: 0.5rem; width: 100%; }
-            .nav-links a { margin: 0 0.5rem; font-size: 0.95rem; }
-            .btn-abrir { margin: 0.5rem 0 0 0; width: 100%; max-width: 200px; text-align: center; }
-
-            .banner-container { height: 300px; }
-            .slide-content { padding: 1rem; }
-            .slide-content h2 { font-size: 1.6rem; }
-            .slide-content p { font-size: 0.9rem; }
-            .banner-btn { font-size: 1.5rem; padding: 0.3rem 0.7rem; }
-            .prev { left: 10px; } .next { right: 10px; }
-
-            .section { padding: 2rem 1rem; }
-            .section h2 { font-size: 1.8rem; }
+            nav { padding: 0.6rem 1rem; }
+            .logo-img { height: 40px; }
+            .logo-text { font-size: 1.1rem; }
             
-            .stat-card { padding: 1.5rem; }
+            /* Enlaces compactados a la derecha de manera limpia */
+            .nav-links a { margin-left: 0.8rem; font-size: 0.9rem; padding: 0.3rem; }
+            .btn-abrir { margin-left: 0.6rem; padding: 0.4rem 0.8rem; font-size: 0.85rem; border-radius: 6px; }
+
+            .banner-container { height: 350px; }
+            .slide-content { padding: 1.2rem; margin: 0 0.5rem; }
+            .slide-content h2 { font-size: 1.5rem; }
+            .slide-content p { font-size: 0.85rem; }
+            .banner-btn { font-size: 1.3rem; padding: 0.3rem 0.6rem; }
+            .prev { left: 5px; } .next { right: 5px; }
+
+            .section { padding: 2.5rem 1rem; }
+            .section h2 { font-size: 1.6rem; }
+            
+            .stat-card { padding: 1.8rem 1.2rem; }
             .stat-card h3 { font-size: 2.2rem; }
 
-            .bar-container { gap: 1.5rem; }
-            .bar { width: 60px; }
-            .chart-labels { gap: 2rem; }
-            .bar-label { font-size: 0.8rem; }
+            /* Gráfico flexible */
+            .chart-wrapper { gap: 1.5rem; }
+            .bar { width: 55px; }
+            .bar span { font-size: 0.85rem; top: -25px; }
+            .bar-label { font-size: 0.75rem; min-height: 45px; margin-top: 0.5rem; }
 
-            .form-bg { padding: 2rem 1rem; border-radius: 20px; margin: 1.5rem auto; }
-            .form-bg h2 { font-size: 1.5rem; }
+            .form-bg { padding: 2rem 1.2rem; border-radius: 20px; margin: 1.5rem 0.5rem; }
+            .form-bg h2 { font-size: 1.4rem !important; }
+            .submit-btn { font-size: 1.1rem; padding: 0.9rem; }
 
-            .mv-container { padding: 1.5rem; grid-template-columns: 1fr; }
+            .mv-container { padding: 1.5rem; grid-template-columns: 1fr; gap: 1.5rem; }
             .mv-border { border-left: none; border-top: 2px solid #cbdfff; padding-left: 0; padding-top: 1.5rem; }
             
             .redes-sociales-container { padding: 25px 15px; margin: 20px 10px; }
-            .red-link { width: 100%; justify-content: center; }
+            .redes-iconos { gap: 12px; }
+            .red-link { width: 100%; justify-content: center; padding: 10px 20px; font-size: 0.95rem; }
+        }
+
+        /* Soporte extra para pantallas muy pequeñas (Ej. iPhone SE) */
+        @media (max-width: 380px) {
+            .logo-text { display: none; } /* Oculta texto de logo para priorizar botones */
+            .chart-wrapper { gap: 0.8rem; }
+            .bar { width: 45px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- --- NAVBAR CORREGIDO --- -->
+    <!-- --- NAVBAR OPTIMIZADO --- -->
     <nav>
         <div class="logo-container">
             <img src="diseños/logocali.webp" class="logo-img" alt="Logo Helados Cali">
@@ -236,8 +247,7 @@
         <div class="nav-links">
             <a href="index.html" class="active">Inicio</a>
             <a href="catalogo.html">Catálogo</a>
-            <!-- Botón del Video integrado aquí -->
-            <button class="btn-abrir" id="openBtn">Ver Video</button>
+            <button class="btn-abrir" id="openBtn">Video</button>
         </div>
     </nav>
 
@@ -246,8 +256,7 @@
         <div class="modal-content">
             <button class="btn-cerrar" id="closeBtn">&times;</button>
             <div class="video-container">
-                <!-- Cambia 'dQw4w9WgXcQ' por el ID de tu video corporativo de YouTube -->
-                <iframe id="youtubeVideo" src="https://www.youtube.com/embed/p9sXa_VpmS0?si=sL13jxTBUyD3Hr-d?enablejsapi=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe id="youtubeVideo" src="https://www.youtube.com/embed/p9sXa_VpmS0?enablejsapi=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
     </div>
@@ -290,16 +299,24 @@
             </div>
         </div>
 
+        <!-- Gráfico Estructurado Completo para Móviles -->
         <div class="chart-box">
             <h3>Proyección de Inversión Semanal vs Mensual</h3>
-            <p style="max-width:600px; margin-bottom: 1rem;">Si inviertes consecutivamente <strong>$80 semanales</strong> in nuestros productos, tu retorno mensual superará las expectativas gracias a la venta por volumen:</p>
-            <div class="bar-container">
-                <div class="bar invertido"><span>$320</span></div>
-                <div class="bar ganancia"><span>+$416</span></div>
-            </div>
-            <div class="chart-labels">
-                <div class="bar-label">Inversión Mensual ($80x4)</div>
-                <div class="bar-label" style="color: var(--cali-red);">Retorno + Utilidades Mínimas</div>
+            <p style="max-width:600px; margin-bottom: 1rem; font-size: 0.95rem;">Si inviertes consecutivamente <strong>$80 semanales</strong> en nuestros productos, tu retorno mensual superará las expectativas gracias a la venta por volumen:</p>
+            
+            <div class="chart-wrapper">
+                <div class="chart-column">
+                    <div class="bar-container">
+                        <div class="bar invertido"><span>$320</span></div>
+                    </div>
+                    <div class="bar-label">Inversión Mensual ($80x4)</div>
+                </div>
+                <div class="chart-column">
+                    <div class="bar-container">
+                        <div class="bar ganancia"><span>+$416</span></div>
+                    </div>
+                    <div class="bar-label" style="color: var(--cali-red);">Retorno + Utilidades Mínimas</div>
+                </div>
             </div>
         </div>
     </section>
@@ -383,36 +400,32 @@
     <!-- --- LÓGICA DE JAVASCRIPT --- -->
     <script>
         // --- CONTROL DEL MODAL EMERGENTE (VIDEO DE YOUTUBE) ---
-   const openBtn = document.getElementById('openBtn');
-const closeBtn = document.getElementById('closeBtn');
-const videoModal = document.getElementById('videoModal');
-const youtubeVideo = document.getElementById('youtubeVideo');
-const videoSrc = youtubeVideo.src;
+        const openBtn = document.getElementById('openBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const videoModal = document.getElementById('videoModal');
+        const youtubeVideo = document.getElementById('youtubeVideo');
+        const videoSrc = youtubeVideo.src;
 
-// NUEVO: Abre el modal automáticamente al cargar la página
-window.addEventListener('DOMContentLoaded', () => {
-    videoModal.classList.add('mostrar');
-});
+        window.addEventListener('DOMContentLoaded', () => {
+            videoModal.classList.add('mostrar');
+        });
 
-// Abrir ventana emergente manualmente (al hacer clic en el botón del menú)
-openBtn.addEventListener('click', () => {
-    videoModal.classList.add('mostrar');
-});
+        openBtn.addEventListener('click', () => {
+            videoModal.classList.add('mostrar');
+        });
 
-// Cerrar ventana emergente deteniendo el video
-const cerrarModal = () => {
-    videoModal.classList.remove('mostrar');
-    youtubeVideo.src = '';
-    youtubeVideo.src = videoSrc;
-};
+        const cerrarModal = () => {
+            videoModal.classList.remove('mostrar');
+            youtubeVideo.src = '';
+            youtubeVideo.src = videoSrc;
+        };
 
-closeBtn.addEventListener('click', cerrarModal);
-
-videoModal.addEventListener('click', (e) => {
-    if (e.target === videoModal) {
-        cerrarModal();
-    }
-});
+        closeBtn.addEventListener('click', cerrarModal);
+        videoModal.addEventListener('click', (e) => {
+            if (e.target === videoModal) {
+                cerrarModal();
+            }
+        });
 
         // --- BANNER INTERACTIVO ---
         let currentSlide = 0;
@@ -436,7 +449,7 @@ videoModal.addEventListener('click', (e) => {
             contador.innerText = `${textarea.value.length} / 600 caracteres`;
         });
 
-        // --- VALIDACIÓN DE CÉDULA FILTRADA (Sólo V, E, J iniciales + números) ---
+        // --- VALIDACIÓN DE CÉDULA FILTRADA ---
         const cedulaInput = document.getElementById('cedula');
         cedulaInput.addEventListener('input', (e) => {
             let valor = e.target.value.toUpperCase();
