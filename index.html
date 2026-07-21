@@ -1,46 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Helados Cali - El Tacón | Inicio</title>
-    <link rel="icon" type="image/png" href="diseños/icono.png">
-    
-    <style>
-        /* --- PALETA DE COLORES CORPORATIVA (Helados Cali) --- */
-        :root {
-            --cali-blue: #0050a0;
-            --cali-blue-hover: #003a75;
-            --cali-red: #e31b23;
-            --cali-yellow: #f9db00;
-            --background: #f0f7ff;
-            --text: #1a1a1a;
-            --card-bg: #ffffff;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--background); color: var(--text); line-height: 1.6; }
-
-        /* --- NAVBAR --- */
-        nav { background: #fff; padding: 0.5rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 1000; border-bottom: 4px solid var(--cali-red); }
-        .logo-container { display: flex; align-items: center; gap: 0.8rem; }
-        .logo-img { height: 60px; width: auto; object-fit: contain; }
-        .logo-text { font-size: 1.4rem; font-weight: bold; color: var(--cali-blue); text-transform: uppercase; }
-        .nav-links { display: flex; align-items: center; }
-        .nav-links a { text-decoration: none; color: var(--text); font-weight: 600; margin-left: 2rem; transition: color 0.3s; padding: 0.5rem; }
-        .nav-links a:hover, .nav-links a.active { color: var(--cali-red); border-bottom: 2px solid var(--cali-yellow); }
-
-        /* --- BOTÓN PARA EL MODAL (Integrado en el Nav) --- */
-        .btn-abrir {
-            margin-left: 2rem;
-            padding: 0.6rem 1.2rem;
-            font-size: 0.95rem;
-            font-weight: bold;
-            background-color: var(--cali-blue);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
+cursor: pointer;
             transition: background 0.3s, transform 0.2s;
         }
         .btn-abrir:hover {
@@ -193,7 +151,6 @@
             .logo-img { height: 40px; }
             .logo-text { font-size: 1.1rem; }
             
-            /* Enlaces compactados a la derecha de manera limpia */
             .nav-links a { margin-left: 0.8rem; font-size: 0.9rem; padding: 0.3rem; }
             .btn-abrir { margin-left: 0.6rem; padding: 0.4rem 0.8rem; font-size: 0.85rem; border-radius: 6px; }
 
@@ -210,7 +167,6 @@
             .stat-card { padding: 1.8rem 1.2rem; }
             .stat-card h3 { font-size: 2.2rem; }
 
-            /* Gráfico flexible */
             .chart-wrapper { gap: 1.5rem; }
             .bar { width: 55px; }
             .bar span { font-size: 0.85rem; top: -25px; }
@@ -228,9 +184,8 @@
             .red-link { width: 100%; justify-content: center; padding: 10px 20px; font-size: 0.95rem; }
         }
 
-        /* Soporte extra para pantallas muy pequeñas (Ej. iPhone SE) */
         @media (max-width: 380px) {
-            .logo-text { display: none; } /* Oculta texto de logo para priorizar botones */
+            .logo-text { display: none; }
             .chart-wrapper { gap: 0.8rem; }
             .bar { width: 45px; }
         }
@@ -256,43 +211,12 @@
         <div class="modal-content">
             <button class="btn-cerrar" id="closeBtn">&times;</button>
             <div class="video-container">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/N2-cktb6-qM?si=aEyokhXOhtx-0O7B" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <!-- Se agregó el ID "youtubeVideo" para que los scripts lo reconozcan -->
+                <iframe id="youtubeVideo" width="560" height="315" src="https://www.youtube.com/embed/N2-cktb6-qM?si=aEyokhXOhtx-0O7B" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
         </div>
     </div>
-<script>
-    // Seleccionamos los elementos del DOM
-    const openBtn = document.getElementById('openBtn');
-    const closeBtn = document.getElementById('closeBtn');
-    const videoModal = document.getElementById('videoModal');
-    const iframe = videoModal.querySelector('iframe');
 
-    // Guardamos la URL original del iframe para poder restablecerla al cerrar
-    const videoSrc = iframe.src;
-
-    // Abrir el modal al hacer clic en el botón "Video"
-    openBtn.addEventListener('click', () => {
-        videoModal.classList.add('mostrar');
-    });
-
-    // Cerrar el modal al hacer clic en el botón de cerrar ("X")
-    closeBtn.addEventListener('click', () => {
-        videoModal.classList.remove('mostrar');
-        // Opcional pero recomendado: Detiene la reproducción del video de YouTube al cerrar
-        iframe.src = "";
-        iframe.src = videoSrc;
-    });
-
-    // Cerrar el modal si el usuario hace clic fuera de la caja del video (en el fondo oscuro)
-    videoModal.addEventListener('click', (e) => {
-        if (e.target === videoModal) {
-            videoModal.classList.remove('mostrar');
-            // Detiene la reproducción del video
-            iframe.src = "";
-            iframe.src = videoSrc;
-        }
-    });
-</script>
     <!-- --- BANNER INTERACTIVO --- -->
     <div class="banner-container">
         <button class="banner-btn prev" onclick="changeSlide(-1)">&#10094;</button>
@@ -331,7 +255,6 @@
             </div>
         </div>
 
-        <!-- Gráfico Estructurado Completo para Móviles -->
         <div class="chart-box">
             <h3>Proyección de Inversión Semanal vs Mensual</h3>
             <p style="max-width:600px; margin-bottom: 1rem; font-size: 0.95rem;">Si inviertes consecutivamente <strong>$80 semanales</strong> en nuestros productos, tu retorno mensual superará las expectativas gracias a la venta por volumen:</p>
@@ -429,7 +352,7 @@
         <p>&copy; 2026 Helados Cali - El Tacón. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- --- LÓGICA DE JAVASCRIPT --- -->
+    <!-- --- LÓGICA DE JAVASCRIPT UNIFICADA --- -->
     <script>
         // --- CONTROL DEL MODAL EMERGENTE (VIDEO DE YOUTUBE) ---
         const openBtn = document.getElementById('openBtn');
@@ -438,6 +361,7 @@
         const youtubeVideo = document.getElementById('youtubeVideo');
         const videoSrc = youtubeVideo.src;
 
+        // Abre el modal automáticamente al cargar la página
         window.addEventListener('DOMContentLoaded', () => {
             videoModal.classList.add('mostrar');
         });
@@ -449,7 +373,7 @@
         const cerrarModal = () => {
             videoModal.classList.remove('mostrar');
             youtubeVideo.src = '';
-            youtubeVideo.src = videoSrc;
+            youtubeVideo.src = videoSrc; // Detiene la reproducción al cerrar
         };
 
         closeBtn.addEventListener('click', cerrarModal);
@@ -472,6 +396,8 @@
         function changeSlide(direction) {
             showSlide(currentSlide + direction);
         }
+        
+        // Cambio automático cada 5 segundos
         setInterval(() => changeSlide(1), 5000);
 
         // --- CONTADOR DE CARACTERES EN TIEMPO REAL ---
