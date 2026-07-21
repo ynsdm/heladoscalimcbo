@@ -260,7 +260,39 @@
             </div>
         </div>
     </div>
+<script>
+    // Seleccionamos los elementos del DOM
+    const openBtn = document.getElementById('openBtn');
+    const closeBtn = document.getElementById('closeBtn');
+    const videoModal = document.getElementById('videoModal');
+    const iframe = videoModal.querySelector('iframe');
 
+    // Guardamos la URL original del iframe para poder restablecerla al cerrar
+    const videoSrc = iframe.src;
+
+    // Abrir el modal al hacer clic en el botón "Video"
+    openBtn.addEventListener('click', () => {
+        videoModal.classList.add('mostrar');
+    });
+
+    // Cerrar el modal al hacer clic en el botón de cerrar ("X")
+    closeBtn.addEventListener('click', () => {
+        videoModal.classList.remove('mostrar');
+        // Opcional pero recomendado: Detiene la reproducción del video de YouTube al cerrar
+        iframe.src = "";
+        iframe.src = videoSrc;
+    });
+
+    // Cerrar el modal si el usuario hace clic fuera de la caja del video (en el fondo oscuro)
+    videoModal.addEventListener('click', (e) => {
+        if (e.target === videoModal) {
+            videoModal.classList.remove('mostrar');
+            // Detiene la reproducción del video
+            iframe.src = "";
+            iframe.src = videoSrc;
+        }
+    });
+</script>
     <!-- --- BANNER INTERACTIVO --- -->
     <div class="banner-container">
         <button class="banner-btn prev" onclick="changeSlide(-1)">&#10094;</button>
