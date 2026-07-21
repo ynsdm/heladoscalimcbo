@@ -1,4 +1,46 @@
-cursor: pointer;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helados Cali - El Tacón | Inicio</title>
+    <link rel="icon" type="image/png" href="diseños/icono.png">
+    
+    <style>
+        /* --- PALETA DE COLORES CORPORATIVA (Helados Cali) --- */
+        :root {
+            --cali-blue: #0050a0;
+            --cali-blue-hover: #003a75;
+            --cali-red: #e31b23;
+            --cali-yellow: #f9db00;
+            --background: #f0f7ff;
+            --text: #1a1a1a;
+            --card-bg: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--background); color: var(--text); line-height: 1.6; }
+
+        /* --- NAVBAR --- */
+        nav { background: #fff; padding: 0.5rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 1000; border-bottom: 4px solid var(--cali-red); }
+        .logo-container { display: flex; align-items: center; gap: 0.8rem; }
+        .logo-img { height: 60px; width: auto; object-fit: contain; }
+        .logo-text { font-size: 1.4rem; font-weight: bold; color: var(--cali-blue); text-transform: uppercase; }
+        .nav-links { display: flex; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text); font-weight: 600; margin-left: 2rem; transition: color 0.3s; padding: 0.5rem; }
+        .nav-links a:hover, .nav-links a.active { color: var(--cali-red); border-bottom: 2px solid var(--cali-yellow); }
+
+        /* --- BOTÓN PARA EL MODAL (Integrado en el Nav) --- */
+        .btn-abrir {
+            margin-left: 2rem;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.95rem;
+            font-weight: bold;
+            background-color: var(--cali-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
             transition: background 0.3s, transform 0.2s;
         }
         .btn-abrir:hover {
